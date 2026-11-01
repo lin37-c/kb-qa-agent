@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>知识库问答 Agent</title>
+<style>
+body{margin:0;background:#0f1216;color:#e6e9ee;font-family:"Microsoft YaHei",system-ui,sans-serif;line-height:1.7}
+.wrap{max-width:960px;margin:0 auto;padding:48px 24px 80px}
+h1{font-size:28px;margin:0 0 8px}
+.sub{color:#8c96a3;margin:0 0 32px}
+h2{font-size:18px;margin:40px 0 12px;color:#9fe870;border-left:3px solid #9fe870;padding-left:10px}
+p{color:#c3c9d3}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+th,td{border:1px solid #2a323d;padding:8px 10px;text-align:left}
+th{background:#161c23;color:#9aa5b1}
+img{width:100%;border-radius:8px;border:1px solid #2a323d;margin:10px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+code{background:#161c23;padding:1px 5px;border-radius:4px;color:#9fe870}
+a{color:#7fb3ff}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<h1>知识库问答 Agent</h1>
+<p class="sub">RAG 检索 + 工具调用 + 护栏 · 模型自主选工具 · 能拒答 · 每次调用可回放</p>
+
+<h2>它解决什么</h2>
+<p>个人知识库原来是一堆 markdown，只能靠人工翻找。这个系统把它变成能检索、能带出处回答、能拒答、能调用工具执行查询的东西。</p>
+
+<h2>界面</h2>
+<img src="docs/screens/01_提问与检索.jpg" alt="提问与检索">
+<div class="grid">
+<img src="docs/screens/02_编号类问题.jpg" alt="编号类问题">
+<img src="docs/screens/03_库里没有时拒答.jpg" alt="拒答">
+</div>
+<img src="docs/screens/04_弱相关时提示口径不足.jpg" alt="弱相关提示">
+
+<h2>指标</h2>
+<table>
+<tr><th>指标</th><th>结果</th></tr>
+<tr><td>检索严格命中</td><td>69.35%（含可接受块 79.03%）</td></tr>
+<tr><td>幻觉率</td><td>8.3%（上界，人工复核约 4.7%）</td></tr>
+<tr><td>引用可核</td><td>100%</td></tr>
+<tr><td>引用支撑</td><td>80.9%（下界）</td></tr>
+<tr><td>自主选工具</td><td>27/27 选对</td></tr>
+</table>
+<p>阈值用 232 条正例 / 79 条负例标定，不跨模型沿用——换模型必须重标。</p>
+
+<h2>结构</h2>
+<p>语料 559 文件 → <code>10,110</code> 块；<code>14</code> 个工具，统一返回「结果 / 证据 / 错误」；护栏拦截出口数 = 1，由代码结构保证。</p>
+<p>源码见 <a href="https://github.com/lin37-c/kb-qa-agent">仓库</a>。</p>
+
+<h2>边界</h2>
+<p>只到本机或同网段，单 token，不做多用户隔离；换模型后上述数字不成立，需重测。</p>
+</div></body></html>
